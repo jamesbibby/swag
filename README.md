@@ -1,10 +1,12 @@
 # swag
 
-[![GoDoc](https://godoc.org/github.com/savaki/swag?status.svg)](https://godoc.org/github.com/savaki/swag)
-[![Build Status](https://travis-ci.org/savaki/swag.svg?branch=master)](https://travis-ci.org/savaki/swag)
+This is fork of github.com/savaki which fixes some issues with pointers to base types in model definitions.
+
+[![GoDoc](https://godoc.org/github.com/jamesbibby/swag?status.svg)](https://godoc.org/github.com/jamesbibby/swag)
+[![Build Status](https://travis-ci.org/jamesbibby/swag.svg?branch=master)](https://travis-ci.org/jamesbibby/swag)
 
 ```swag``` is a lightweight library to generate swagger json for Go projects.  
- 
+
 No code generation, no framework constraints, just a simple swagger definition.
 
 ```swag``` is heavily geared towards generating REST/JSON apis.
@@ -13,13 +15,13 @@ No code generation, no framework constraints, just a simple swagger definition.
 ## Installation
 
 ```bash
-go get github.com/savaki/swag
+go get github.com/jamesbibby/swag
 ```
 
 
 ## Status
 
-This package should be considered a release candidate.  No further package changes are expected at this point. 
+This package should be considered a release candidate.  No further package changes are expected at this point.
 
 
 ## Concepts
@@ -36,7 +38,7 @@ In this simple example, we generate an endpoint to retrieve all pets.  The only 
 are the method, path, and the summary.  
 
 ```go
-allPets := endpoint.New("get", "/pet", "Return all the pets") 
+allPets := endpoint.New("get", "/pet", "Return all the pets")
 ```
 
 However, it'll probably be useful if you include definitions of what ```GET /pet``` returns:
@@ -45,10 +47,10 @@ However, it'll probably be useful if you include definitions of what ```GET /pet
 allPets := endpoint.New("get", "/pet", "Return all the pets",
   endpoint.Response(http.StatusOk, Pet{}, "Successful operation"),
   endpoint.Response(http.StatusInternalServerError, Error{}, "Oops ... something went wrong"),
-) 
+)
 ```
 
-Refer to the [godoc](https://godoc.org/github.com/savaki/swag/endpoint) for a list of all the endpoint options
+Refer to the [godoc](https://godoc.org/github.com/jamesbibby/swag/endpoint) for a list of all the endpoint options
 
 ### Walk
 
@@ -63,7 +65,7 @@ api := swag.New(
 
 // iterate over each endpoint, if we've defined a handler, we can use it to bind to the router.  We're using ```gin``
 // in this example, but any web framework will do.
-// 
+//
 api.Walk(func(path string, endpoint *swagger.Endpoint) {
     h := endpoint.Handler.(func(c *gin.Context))
     path = swag.ColonPath(path)
@@ -87,7 +89,7 @@ type Pet struct {
 
 func main() {
     // define our endpoints
-    // 
+    //
     post := endpoint.New("post", "/pet", "Add a new pet to the store",
         endpoint.Handler(handle),
         endpoint.Description("Additional information on adding a pet to the store"),
@@ -99,25 +101,25 @@ func main() {
         endpoint.Path("petId", "integer", "ID of pet to return", true),
         endpoint.Response(http.StatusOK, Pet{}, "successful operation"),
     )
-    
+
     // define the swagger api that will contain our endpoints
-    // 
+    //
     api := swag.New(
       swag.Title("Swagger Petstore"),
       swag.Endpoints(post, get),
     )
-    
+
     // iterate over each endpoint and add them to the default server mux
-    // 
+    //
     for path, endpoints := range api.Paths {
       http.Handle(path, endpoints)
     }
-    
+
     // use the api to server the swagger.json file
-    // 
+    //
     enableCors := true
     http.Handle("/swagger", api.Handler(enableCors))
-    
+
     http.ListenAndServe(":8080", nil)
 }
 ```
@@ -131,4 +133,3 @@ Examples for popular web frameworks can be found in the examples directory:
 * [Gin](examples/gin/main.go)
 * [Gorilla](examples/gorilla/main.go)
 * [httprouter](examples/httprouter/main.go)
-

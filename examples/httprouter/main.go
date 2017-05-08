@@ -5,9 +5,9 @@ import (
 	"net/http"
 
 	"github.com/julienschmidt/httprouter"
-	"github.com/savaki/swag"
-	"github.com/savaki/swag/endpoint"
-	"github.com/savaki/swag/swagger"
+	"github.com/jamesbibby/swag"
+	"github.com/jamesbibby/swag/endpoint"
+	"github.com/jamesbibby/swag/swagger"
 )
 
 func handle(w http.ResponseWriter, _ *http.Request, _ httprouter.Params) {
