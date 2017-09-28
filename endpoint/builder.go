@@ -79,6 +79,24 @@ func Path(name, typ, description string, required bool) Option {
 	return parameter(p)
 }
 
+// PathArray defines a multi-value path parameter for the endpoint.
+func PathArray(name, description string, required bool, criteria ArrayCriteria) Option {
+	p := swagger.Parameter{
+		Name:        name,
+		In:          "path",
+		Type:        "array",
+		Description: description,
+		Required:    required,
+
+		Items:            criteria.Items,
+		CollectionFormat: criteria.CollectionFormat,
+		MinItems:         criteria.MinItems,
+		MaxItems:         criteria.MaxItems,
+	}
+
+	return parameter(p)
+}
+
 // Query defines a query parameter for the endpoint; name, typ, description, and required correspond to the matching
 // swagger fields
 func Query(name, typ, description string, required bool) Option {
@@ -90,6 +108,32 @@ func Query(name, typ, description string, required bool) Option {
 		Required:    required,
 	}
 	return parameter(p)
+}
+
+// QueryArray defines a multi-value query parameter for the endpoint;
+func QueryArray(name, description string, required bool, criteria ArrayCriteria) Option {
+	p := swagger.Parameter{
+		Name:        name,
+		In:          "query",
+		Type:        "array",
+		Description: description,
+		Required:    required,
+
+		Items:            criteria.Items,
+		CollectionFormat: criteria.CollectionFormat,
+		MinItems:         criteria.MinItems,
+		MaxItems:         criteria.MaxItems,
+	}
+
+	return parameter(p)
+}
+
+// ArrayCriteria specifies the criteria to be used when defining a multi-value query/path parameter.
+type ArrayCriteria struct {
+	Items            *Items
+	CollectionFormat CollectionFormat
+	MinItems         int
+	MaxItems         int
 }
 
 // Body defines a body parameter for the swagger endpoint as would commonly be used for the POST, PUT, and PATCH methods
