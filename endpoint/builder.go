@@ -130,8 +130,8 @@ func QueryArray(name, description string, required bool, criteria ArrayCriteria)
 
 // ArrayCriteria specifies the criteria to be used when defining a multi-value query/path parameter.
 type ArrayCriteria struct {
-	Items            *Items
-	CollectionFormat CollectionFormat
+	Items            *swagger.Items
+	CollectionFormat swagger.CollectionFormatType
 	MinItems         int
 	MaxItems         int
 }

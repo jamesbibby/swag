@@ -105,6 +105,54 @@ func TestQuery(t *testing.T) {
 	assert.Equal(t, expected, e.Parameters[0])
 }
 
+func TestQueryArray(t *testing.T) {
+
+	expected := swagger.Parameter{
+		In:          "query",
+		Type:        "array",
+		Name:        "id",
+		Description: "the description",
+		Required:    true,
+
+		Items:            &swagger.Items{Type: "string"},
+		CollectionFormat: swagger.CollectionFormatCSV,
+	}
+
+	e := endpoint.New("get", "/", "get thing",
+		endpoint.QueryArray(expected.Name, expected.Description, expected.Required, endpoint.ArrayCriteria{
+			Items:            &swagger.Items{Type: "string"},
+			CollectionFormat: swagger.CollectionFormatCSV,
+		}),
+	)
+
+	assert.Equal(t, 1, len(e.Parameters))
+	assert.Equal(t, expected, e.Parameters[0])
+}
+
+func TestPathArray(t *testing.T) {
+
+	expected := swagger.Parameter{
+		In:          "path",
+		Type:        "array",
+		Name:        "id",
+		Description: "the description",
+		Required:    true,
+
+		Items:            &swagger.Items{Type: "string"},
+		CollectionFormat: swagger.CollectionFormatCSV,
+	}
+
+	e := endpoint.New("get", "/", "get thing",
+		endpoint.PathArray(expected.Name, expected.Description, expected.Required, endpoint.ArrayCriteria{
+			Items:            &swagger.Items{Type: "string"},
+			CollectionFormat: swagger.CollectionFormatCSV,
+		}),
+	)
+
+	assert.Equal(t, 1, len(e.Parameters))
+	assert.Equal(t, expected, e.Parameters[0])
+}
+
 type Model struct {
 	String string `json:"s"`
 }
