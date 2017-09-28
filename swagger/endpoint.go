@@ -1,5 +1,17 @@
 package swagger
 
+// CollectionFormatType represents an enum for multi-value array parameter format.
+type CollectionFormatType string
+
+// Possible values for CollectionFormat
+const (
+	CollectionFormatCSV   CollectionFormatType = "csv"
+	CollectionFormatSSV                        = "ssv"
+	CollectionFormatTSV                        = "tsv"
+	CollectionFormatPipes                      = "pipes"
+	CollectionFormatMulti                      = "multi"
+)
+
 // Items represents items from the swagger doc
 type Items struct {
 	Type   string `json:"type,omitempty"`
@@ -38,6 +50,13 @@ type Parameter struct {
 	Schema      *Schema `json:"schema,omitempty"`
 	Type        string  `json:"type,omitempty"`
 	Format      string  `json:"format,omitempty"`
+
+	// Collection Related; supported for Query/Path type parameters
+	Items            *Items               `json:"items,omitempty"`
+	CollectionFormat CollectionFormatType `json:"collectionFormat,omitempty"`
+	MinItems         int                  `json:"minItems,omitempty"`
+	MaxItems         int                  `json:"maxItems,omitempty"`
+	UniqueItems      bool                 `json:"uniqueItems,omitempty"`
 }
 
 // Endpoint represents an endpoint from the swagger doc
